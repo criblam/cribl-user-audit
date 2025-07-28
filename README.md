@@ -33,6 +33,6 @@ Provision a Cribl Lake Destination `user_audit`
 Import the search dashboards
 
 Authors:
-Ryan Allen
+Ryan Allen, 
 Daniel Adamic
 
