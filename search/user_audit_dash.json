@@ -1,0 +1,29 @@
+{
+  "schedule": {
+    "enabled": false,
+    "cronSchedule": "0 0 * * *",
+    "tz": "UTC",
+    "keepLastN": 2
+  },
+  "name": "User Audit",
+  "elements": [
+    {
+      "config": {},
+      "search": {
+        "type": "inline",
+        "query": "dataset=\"user_audit\" cribl_api=\"/product/{id}/users\" \n| project _time, user_id=id, email, username, roles | sort by user_id asc, _time asc                            \n| extend time_diff=datetime_diff('minute',_time,prev(_time)), job=row_cumsum(time_diff)\n| summarize job_time=format_datetime(max(_time), 'yy-MM-dd HH:mm'), all_roles=values(roles) by user_id, email, username, job\n| mv-expand all_roles | mv-expand all_roles | sort by all_roles asc | summarize roles=values(all_roles) by user_id, email, username, job_time | sort by user_id asc, job_time asc\n| extend role_updated_at=iif(prev(roles)!=roles, job_time, prev(role_updated_at)) \n| eventstats latest_job=max(job_time) by user_id | where job_time==latest_job\n| project user_id, email, username=tolower(username), roles, role_updated_at \n| join kind=leftouter (\n    dataset=\"cribl_logs\" sourceType=\"access\" status=\"2*\"  \n    | summarize last_activity_at=format_datetime(max(_time), 'yy-MM-dd HH:mm') by username=tolower(user) \n    ) on username\n| join kind=leftouter (\n    dataset=\"cribl_logs\" sourceType=\"access\" status=\"2*\"  \n    | summarize last_activity_at=format_datetime(max(_time), 'yy-MM-dd HH:mm') by username=tolower(user) \n    ) on $left.email==$right.username",
+        "earliest": "-1d",
+        "latest": "now"
+      },
+      "id": "rl06vjano",
+      "layout": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 4
+      },
+      "type": "list.table",
+      "title": "Cribl User Audit"
+    }
+  ]
+}

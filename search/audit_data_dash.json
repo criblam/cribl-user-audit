@@ -1,0 +1,84 @@
+{
+  "schedule": {
+    "enabled": false,
+    "cronSchedule": "0 0 * * *",
+    "tz": "UTC",
+    "keepLastN": 2
+  },
+  "name": "User Audit Datasets",
+  "elements": [
+    {
+      "config": {},
+      "search": {
+        "type": "inline",
+        "query": "dataset=\"user_audit\" cribl_api=\"/product/{id}/users\" | project user_id=id, username, email, cribl_product, user_roles=roles, disabled",
+        "earliest": "-2h",
+        "latest": "now"
+      },
+      "id": "6y1wltmc0",
+      "layout": {
+        "x": 0,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "type": "list.table",
+      "title": "Cribl Users"
+    },
+    {
+      "config": {},
+      "search": {
+        "type": "inline",
+        "query": "dataset=\"user_audit\" cribl_api=\"/teams/{id}/users\" | project user_id, team_id, team_name",
+        "earliest": "-2h",
+        "latest": "now"
+      },
+      "id": "7s00bqe3s",
+      "layout": {
+        "x": 6,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "type": "list.table",
+      "title": "Cribl Users + Team"
+    },
+    {
+      "config": {},
+      "search": {
+        "type": "inline",
+        "runMode": "lastRun",
+        "earliest": "-2h",
+        "latest": "now",
+        "query": "dataset=\"user_audit\" cribl_api=\"/teams\" | project team_id=id, name, team_roles=roles, description\n"
+      },
+      "id": "3ytw25pt4",
+      "layout": {
+        "x": 0,
+        "y": 4,
+        "w": 6,
+        "h": 4
+      },
+      "type": "list.table",
+      "title": "Cribl Teams"
+    },
+    {
+      "config": {},
+      "search": {
+        "type": "inline",
+        "query": "dataset=\"user_audit\" cribl_api=\"/roles\" | project role_id=id, title, permissions=policy, description",
+        "earliest": "-2h",
+        "latest": "now"
+      },
+      "id": "w7zwsnbzm",
+      "layout": {
+        "x": 6,
+        "y": 4,
+        "w": 6,
+        "h": 4
+      },
+      "type": "list.table",
+      "title": "Cribl Roles + Permissions"
+    }
+  ]
+}

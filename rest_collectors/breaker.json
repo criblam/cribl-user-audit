@@ -1,0 +1,26 @@
+{
+  "minRawLength": 256,
+  "id": "cribl_api",
+  "rules": [
+    {
+      "condition": "true",
+      "type": "json_array",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "UTC",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": true,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "cribl_api_items",
+      "jsonArrayField": "items"
+    }
+  ]
+}

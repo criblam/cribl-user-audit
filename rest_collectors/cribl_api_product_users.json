@@ -1,0 +1,131 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "ignoreGroupJobsLimit": false,
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "5 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "60m",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {}
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "list",
+        "itemList": [
+          "stream",
+          "edge",
+          "search"
+        ],
+        "discoverMethod": "get",
+        "pagination": {
+          "type": "none"
+        },
+        "enableDiscoverCode": false,
+        "discoverUrl": "\"https://${C.env.CRIBL_WORKSPACE_NAME}-${C.env.TENANT_ID}.cribl.cloud/api/v1/system/teams\"",
+        "discoverDataField": "items"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "oauth",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "\"https://login.cribl.cloud/oauth/token\"",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "clientSecretParamValue": "\"{{CRIBL CLIENT SECRET}}\"",
+      "authRequestParams": [
+        {
+          "name": "grant_type",
+          "value": "\"client_credentials\""
+        },
+        {
+          "name": "client_id",
+          "value": "\"{{CRIBL CLIENT ID}}\""
+        },
+        {
+          "name": "audience",
+          "value": "\"https://api.cribl.cloud\""
+        }
+      ],
+      "collectUrl": "`https://${C.env.CRIBL_WORKSPACE_NAME}-${C.env.TENANT_ID}.cribl.cloud/api/v1/products/${id}/users`",
+      "tokenRespAttribute": "access_token"
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": false,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "pipeline": "passthru",
+    "output": "cribl_user_audit",
+    "metadata": [
+      {
+        "name": "cribl_api",
+        "value": "\"/product/{id}/users\""
+      },
+      {
+        "name": "cribl_product",
+        "value": "__collectible.id"
+      },
+      {
+        "name": "collection_job_id",
+        "value": "__collectible.guid"
+      }
+    ],
+    "breakerRulesets": [
+      "cribl_api"
+    ]
+  },
+  "savedState": {},
+  "id": "cribl_api_product_users"
+}

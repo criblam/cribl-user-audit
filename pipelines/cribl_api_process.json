@@ -1,0 +1,70 @@
+{
+  "id": "cribl_api_process",
+  "conf": {
+    "output": "default",
+    "streamtags": [],
+    "groups": {
+      "QFqd1e": {
+        "name": "/teams/{id}/users",
+        "index": 0
+      }
+    },
+    "asyncFuncTimeout": 1000,
+    "functions": [
+      {
+        "filter": "source.match(/teams\\/.+\\/users/)",
+        "conf": {
+          "add": [
+            {
+              "disabled": false,
+              "value": "Object.assign(__e, JSON.parse(_raw))",
+              "name": ""
+            },
+            {
+              "disabled": true,
+              "name": "cribl_api",
+              "value": "\"teams/{id}/users\""
+            },
+            {
+              "disabled": true,
+              "name": "team_id",
+              "value": "__collectible.id"
+            },
+            {
+              "disabled": true,
+              "name": "team_name",
+              "value": "__collectible.name"
+            }
+          ],
+          "remove": []
+        },
+        "id": "eval",
+        "groupId": "QFqd1e"
+      },
+      {
+        "filter": "source.match(/teams\\/.+\\/users/)",
+        "conf": {
+          "srcExpr": "items",
+          "dstField": "user_id"
+        },
+        "id": "unroll",
+        "groupId": "QFqd1e"
+      },
+      {
+        "filter": "source.match(/teams\\/.+\\/users/)",
+        "conf": {
+          "remove": [
+            "_raw",
+            "items",
+            "count",
+            "cribl_breaker"
+          ]
+        },
+        "id": "eval",
+        "groupId": "QFqd1e",
+        "final": true
+      }
+    ],
+    "description": ""
+  }
+}
