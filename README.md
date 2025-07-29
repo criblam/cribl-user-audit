@@ -26,8 +26,6 @@ You should also validate the the expression is evaluating the proper workspace a
 Import the provided event breaker and validate the REST Collectors, which use it, are properly referencing it.  
 
 
-### Cribl Lake
-Provision a Cribl Lake Destination `user_audit`
 
 ### Cribl Search
 Import the search dashboards
