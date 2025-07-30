@@ -83,7 +83,7 @@
           "value": "\"https://api.cribl.cloud\""
         }
       ],
-      "collectUrl": "\"https://${C.env.CRIBL_WORKSPACE_NAME}-${C.env.TENANT_ID}.cribl.cloud/api/v1/system/teams\"",
+      "collectUrl": "`https://${C.env.CRIBL_WORKSPACE_NAME}-${C.env.TENANT_ID}.cribl.cloud/api/v1/system/teams`",
       "tokenRespAttribute": "access_token"
     },
     "destructive": false,
