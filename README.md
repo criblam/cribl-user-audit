@@ -17,13 +17,13 @@ You must provision Cribl API Credentials, and replace two placeholders in the RE
 
 `{{CRIBL CLIENT ID}}` 
 
-You should also validate the the expression is evaluating the proper workspace and org_id for your environment:
+You should also validate that the expression is evaluating to the proper workspace and org_id for your environment:
 `${C.env.CRIBL_WORKSPACE_NAME}-${C.env.TENANT_ID}`
 
 
 ### Event Breaker
 
-Import the provided event breaker and validate the REST Collectors, which use it, are properly referencing it.  
+Import the provided event breaker and validate that the REST Collectors are properly referencing it.  
 
 
 
